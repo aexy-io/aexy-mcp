@@ -13,3 +13,8 @@ dependencies = [
 
 [project.scripts]
 aexy-mcp = "aexy_mcp.server:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
