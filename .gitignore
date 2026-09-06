@@ -25,3 +25,6 @@ Thumbs.db
 # Environment variables
 .env
 .env.*
+
+# Local assistant settings (may hold tokens)
+.claude/
