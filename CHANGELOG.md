@@ -4,6 +4,31 @@ All notable changes to `aexy-mcp` are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/); versions follow
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-09-21
+
+### Fixed
+
+- **A failure without a body is no longer silence.** The check for an empty
+  response ran before anything looked at the status code, so a redirect, a
+  proxy's bare 401 and a gateway's bare 502 all returned nothing at all. The
+  client was left waiting on `initialize` until its own timeout, with no
+  message to show. Status is read first now, emptiness last.
+- **A redirect says where it points.** `httpx` does not follow redirects, and
+  following one would replay the bearer token to wherever the hop leads, so the
+  bridge names the target and the variable to change instead. An `http://` URL
+  for an `https://` server is the usual cause.
+- **A malformed `AEXY_API_URL` no longer kills the session.** `httpx.InvalidURL`
+  is not an `httpx.HTTPError`, so it escaped the handler and took every pending
+  request id with it. Any failure to reach the server is now answered per id.
+- **A non-numeric `AEXY_TIMEOUT_SECONDS` falls back to the default** with a line
+  on stderr, rather than raising at import — which happened before `main` could
+  reach its "AEXY_API_TOKEN is not set" check, so the traceback named neither
+  the variable nor the fix. A zero or negative value falls back too.
+- **stdin and stdout are read and written as UTF-8** rather than the locale
+  encoding. On Windows that was cp1252, which mangled non-Latin arguments.
+- **A relayed error body is clipped**, so a proxy's HTML error page cannot
+  become the whole JSON-RPC error message.
+
 ## [1.0.0] - 2026-09-06
 
 The package is now a stdio bridge to the Aexy remote MCP server, and nothing

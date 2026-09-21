@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aexy-mcp"
-version = "1.0.0"
+version = "1.0.1"
 description = "stdio bridge to the Aexy remote MCP server"
 requires-python = ">=3.11"
 dependencies = [
